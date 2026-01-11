@@ -1,0 +1,15 @@
+.git
+.gitignore
+README.md
+
+# SQLite DB locale (optionnel). En prod Render, on la génère via /install.php ou on utilise un disque persistant.
+data/*.db
+
+# OS/IDE
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
