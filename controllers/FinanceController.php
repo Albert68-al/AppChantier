@@ -63,6 +63,10 @@ class FinanceController {
         ];
     }
     
+    public function ajouter_depense() {
+        return $this->ajouterDepense();
+    }
+    
     public function ajouterDepense() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
@@ -88,6 +92,10 @@ class FinanceController {
         $chantiers = $this->chantierModel->getAll();
         
         return ['chantiers' => $chantiers];
+    }
+    
+    public function ajouter_paiement() {
+        return $this->ajouterPaiement();
     }
     
     public function ajouterPaiement() {
@@ -117,6 +125,10 @@ class FinanceController {
         return ['chantiers' => $chantiers];
     }
     
+    public function delete_depense($id) {
+        return $this->deleteDepense($id);
+    }
+    
     public function deleteDepense($id) {
         if ($this->auth->hasRole('admin')) {
             try {
@@ -134,6 +146,10 @@ class FinanceController {
         exit;
     }
     
+    public function delete_paiement($id) {
+        return $this->deletePaiement($id);
+    }
+    
     public function deletePaiement($id) {
         if ($this->auth->hasRole('admin')) {
             try {
@@ -149,6 +165,10 @@ class FinanceController {
         
         header('Location: index.php?controller=finance&action=index');
         exit;
+    }
+    
+    public function rapport_chantier($chantier_id) {
+        return $this->rapportChantier($chantier_id);
     }
     
     public function rapportChantier($chantier_id) {
@@ -187,6 +207,10 @@ class FinanceController {
             'solde' => $solde,
             'budgetTotal' => $chantier['budget_total']
         ];
+    }
+    
+    public function generer_pdf($chantier_id) {
+        return $this->genererRapportPDF($chantier_id);
     }
     
     public function genererRapportPDF($chantier_id) {

@@ -104,7 +104,7 @@ $alertesStock = $data['alertesStock'] ?? [];
             <div class="card bg-warning text-white">
                 <div class="card-body text-center">
                     <h6>Dépenses</h6>
-                    <h1><?php echo number_format($totalDepenses, 0, ',', ' '); ?> €</h1>
+                    <h1><?php echo number_format($totalDepenses, 0, ',', ' '); ?> FBU</h1>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@ $alertesStock = $data['alertesStock'] ?? [];
             <div class="card bg-success text-white">
                 <div class="card-body text-center">
                     <h6>Paiements</h6>
-                    <h1><?php echo number_format($totalPaiements, 0, ',', ' '); ?> €</h1>
+                    <h1><?php echo number_format($totalPaiements, 0, ',', ' '); ?> FBU</h1>
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@ $alertesStock = $data['alertesStock'] ?? [];
                 <?php echo ($totalPaiements - $totalDepenses) >= 0 ? 'bg-info' : 'bg-danger'; ?> text-white">
                 <div class="card-body text-center">
                     <h6>Bénéfice/Perte</h6>
-                    <h1><?php echo number_format($totalPaiements - $totalDepenses, 0, ',', ' '); ?> €</h1>
+                    <h1><?php echo number_format($totalPaiements - $totalDepenses, 0, ',', ' '); ?> FBU</h1>
                 </div>
             </div>
         </div>
@@ -178,7 +178,7 @@ $alertesStock = $data['alertesStock'] ?? [];
                                 ?>
                                 <tr>
                                     <td><?php echo ucfirst($categorie); ?></td>
-                                    <td><?php echo number_format($montant, 2, ',', ' '); ?> €</td>
+                                    <td><?php echo number_format($montant, 2, ',', ' '); ?> FBU</td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="progress flex-grow-1 me-2" style="height: 10px;">
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const chantiersData = {
         labels: [<?php echo implode(', ', array_map(function($chantier) { return "'" . htmlspecialchars($chantier['nom']) . "'"; }, array_values($depensesParChantier))); ?>],
         datasets: [{
-            label: 'Dépenses (€)',
+            label: 'Dépenses (FBU)',
             data: [<?php echo implode(', ', array_map(function($chantier) { return $chantier['total']; }, array_values($depensesParChantier))); ?>],
             backgroundColor: '#36A2EB'
         }]
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     beginAtZero: true,
                     ticks: {
                         callback: function(value) {
-                            return value + ' €';
+                            return value + ' FBU';
                         }
                     }
                 }
