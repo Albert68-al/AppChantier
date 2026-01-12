@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
             <h4 class="text-white">
                 <i class="fas fa-hard-hat"></i> <?php echo APP_NAME; ?>
             </h4>
-            <small class="text-light">Version <?php echo APP_VERSION; ?></small>
+           
         </div>
         
         <ul class="nav flex-column">

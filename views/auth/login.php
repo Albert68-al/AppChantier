@@ -143,7 +143,7 @@ if (isset($_SESSION['user_id'])) {
                 </button>
                 
                 <div class="footer-text">
-                    <small>Version 1.0.0 &copy; <?php echo date('Y'); ?></small>
+                    <small>al company &copy; <?php echo date('Y'); ?></small>
                 </div>
             </form>
         </div>
