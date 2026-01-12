@@ -14,6 +14,9 @@ class Database {
             
             // Activer les clés étrangères pour SQLite
             $this->connection->exec('PRAGMA foreign_keys = ON');
+
+            $this->initializeSchema();
+
             
         } catch(PDOException $e) {
             die("Erreur de connexion : " . $e->getMessage());
@@ -50,6 +53,44 @@ class Database {
             throw $e;
         }
     }
+
+    private function initializeSchema() {
+    // Table users
+    $this->connection->exec("
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            role TEXT DEFAULT 'user',
+            prenom TEXT,
+            nom TEXT,
+            status INTEGER DEFAULT 1,
+            last_login TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    ");
+
+    // Admin par défaut (si table vide)
+    $count = $this->connection
+        ->query("SELECT COUNT(*) FROM users")
+        ->fetchColumn();
+
+    if ($count == 0) {
+        $stmt = $this->connection->prepare("
+            INSERT INTO users (username, password, role, prenom, nom, status)
+            VALUES (?, ?, ?, ?, ?, 1)
+        ");
+
+        $stmt->execute([
+            'admin',
+            password_hash('admin123', PASSWORD_DEFAULT),
+            'admin',
+            'Admin',
+            'System'
+        ]);
+    }
+}
+
 }
 
 // Fonction de débug
