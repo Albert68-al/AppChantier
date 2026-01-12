@@ -62,10 +62,10 @@ class Database {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
-            role TEXT DEFAULT 'user',
+            role TEXT DEFAULT 'user' CHECK(role IN ('admin', 'chef', 'comptable')),
             prenom TEXT,
             nom TEXT,
-            email TEXT,
+            email TEXT UNIQUE,
             telephone TEXT,
             status INTEGER DEFAULT 1,
             last_login TEXT,
@@ -73,17 +73,22 @@ class Database {
         )
     ");
 
-    $count = $this->connection->query("SELECT COUNT(*) FROM users")->fetchColumn();
-    if ($count == 0) {
+    // Vérifier si l'admin existe
+    $stmt = $this->connection->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+    $stmt->execute(['admin']);
+    $adminExists = $stmt->fetchColumn();
+
+    if (!$adminExists) {
         $this->connection->prepare("
-            INSERT INTO users (username, password, role, prenom, nom, status)
-            VALUES (?, ?, ?, ?, ?, 1)
+            INSERT INTO users (username, password, role, nom, prenom, email, status)
+            VALUES (?, ?, ?, ?, ?, ?, 1)
         ")->execute([
             'admin',
             password_hash('admin123', PASSWORD_DEFAULT),
             'admin',
-            'Admin',
-            'System'
+            'Esperence',
+            'Ahishake',
+            'admin@entreprise.com'
         ]);
     }
 
@@ -97,7 +102,7 @@ class Database {
             budget_total REAL DEFAULT 0,
             date_debut TEXT,
             date_fin TEXT,
-            statut TEXT DEFAULT 'en_cours',
+            statut TEXT DEFAULT 'en_cours' CHECK(statut IN ('en_cours','suspendu','termine')),
             chef_chantier_id INTEGER,
             description TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -115,10 +120,10 @@ class Database {
             prenom TEXT,
             email TEXT,
             telephone TEXT,
-            fonction TEXT,
+            fonction TEXT CHECK(fonction IN ('chef','ouvrier','ingenieur')),
             salaire_journalier REAL,
             date_embauche TEXT,
-            statut TEXT DEFAULT 'actif'
+            statut TEXT DEFAULT 'actif' CHECK(statut IN ('actif','inactif','congé'))
         )
     ");
 
@@ -140,7 +145,7 @@ class Database {
         CREATE TABLE IF NOT EXISTS depenses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             chantier_id INTEGER,
-            type_depense TEXT,
+            type_depense TEXT CHECK(type_depense IN ('materiel','salaire','transport','autre')),
             description TEXT,
             montant REAL,
             date_depense TEXT,
@@ -156,7 +161,7 @@ class Database {
             chantier_id INTEGER,
             montant REAL,
             date_paiement TEXT,
-            mode_paiement TEXT,
+            mode_paiement TEXT CHECK(mode_paiement IN ('virement','cheque','espece')),
             reference TEXT,
             notes TEXT,
             FOREIGN KEY (chantier_id) REFERENCES chantiers(id)
